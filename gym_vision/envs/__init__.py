@@ -2,11 +2,16 @@ import gym
 import gym.envs.mujoco
 
 custom_envs = {
-        "TestEnv-v0": dict(
-            path='gym_vision.envs.test:TestEnv',
+        "VisualReacher-v0": dict(
+            path='gym_vision.envs.reacher:ReacherEnv',
             max_episode_steps=100,
             reward_threshold=0.0,
             kwargs=dict()
+        ),
+        "VisualPointMass-v0": dict(
+            path='gym_vision.envs.pointmass:VisualPointMazeEnv',
+            max_episode_steps=100,
+            kwargs=dict(grayscale=False,width=224,height=224)
         ),
 }
 

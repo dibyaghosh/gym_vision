@@ -4,7 +4,11 @@ A collection of continuous control tasks with vision in the Gym framework.
 
 ### Current Environments
 
-- Reacher
+**VisualReacher-v0**
+![Alt text](docs/VisualReacher-v0.png?raw=true "Reacher")
+
+**VisualPointMass-v0**
+![Alt text](docs/VisualPointMass-v0.png?raw=true "Pointmass")
 
 ### Developing
 

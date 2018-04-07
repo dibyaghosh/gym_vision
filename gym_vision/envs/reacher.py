@@ -4,7 +4,7 @@ import numpy as np
 from gym.spaces import Box
 
 
-class TestEnv(reacher.ReacherEnv):
+class ReacherEnv(reacher.ReacherEnv):
     height = 224
     width = 224
 
