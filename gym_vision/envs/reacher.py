@@ -22,7 +22,7 @@ class ReacherEnv(reacher.ReacherEnv):
 
     def viewer_setup(self):
         self.viewer.cam.trackbodyid = -1
-        self.viewer.cam.distance = 1.0
+        self.viewer.cam.distance = .6
         self.viewer.cam.elevation = -90
         self.viewer.cam.lookat[:] = np.array([0, 0, 0])
 
