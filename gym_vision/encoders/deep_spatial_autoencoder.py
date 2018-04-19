@@ -12,7 +12,7 @@ class DeepSpatialAutoencoder(nn.Module):
         self.feature_point_dim = feature_point_dim # each one will have 2 coordinates representing x,y
         self.reconstruct_dim = reconstruct_dim
 
-        self.alpha = torch.Variable(1) # scalar value?
+        self.alpha = torch.tensor([1], requires_grad=True) # scalar value?
 
         self.build_conv_layers()
 
@@ -27,8 +27,9 @@ class DeepSpatialAutoencoder(nn.Module):
 
     def spatial_softmax(self, x):
         x_flat = x.view(x.shape[0], x.shape[1], -1) # N x channels x (presoftmax_dim)**2
-        weighted_x = x_flat * x_mask
-        weighted_y = y_flat * y_mask
+        softmaxed_x = F.softmax(x_flat / self.alpha, dim=2)
+        weighted_x = softmaxed_x * x_mask
+        weighted_y = softmaxed_x * y_mask
 
         mean_x = torch.mean(weighted_x, dim=2) # N x channels
         mean_y = torch.mean(weighted_y, dim=2)
