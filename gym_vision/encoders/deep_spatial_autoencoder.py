@@ -55,7 +55,8 @@ class DeepSpatialAutoencoder(nn.Module):
     dsa = DeepSpatialAutoencoder(224, 16, 56)
 """
 
-def train(x, y, dsa, optimizer):
+def train_step(x, y, dsa, optimizer):
+    optimizer.zero_grad()
     loss = nn.MSELoss(dsa(x), x)
     loss.backward()
     optimizer.step()
