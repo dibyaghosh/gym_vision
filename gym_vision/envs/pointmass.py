@@ -1,7 +1,13 @@
 from gym_vision.envs.vision_env import VisionEnv
 import numpy as np
 from gym import utils
-from rllab.misc import logger as logger
+
+try:
+    from rllab.misc import logger as logger
+    rllab = True
+except:
+    rllab = False 
+    
 import os.path as osp
 
 MODEL_DIR = osp.abspath(osp.join(osp.dirname(__file__),'assets'))
@@ -12,7 +18,7 @@ class PointmassEnv(VisionEnv, utils.EzPickle):
         self.sparse_reward = sparse_reward
         VisionEnv.__init__(self,osp.join(MODEL_DIR,'twod_maze.xml'), 2, **kwargs)
         
-    def _step(self, a):
+    def step(self, a):
         vec_dist = self.get_body_com("particle") - self.get_body_com("target")
         dist = np.linalg.norm(vec_dist)
         reward_dist = - dist  # particle to target
@@ -25,17 +31,10 @@ class PointmassEnv(VisionEnv, utils.EzPickle):
             reward = reward_dist
 
         self.do_simulation(a, self.frame_skip)
-        self.model.forward()
         ob = self._get_obs()
 
         done = False
         return ob, reward, done, dict(distance=dist)
-
-    def viewer_setup(self):
-        self.viewer.cam.trackbodyid = -1
-        self.viewer.cam.distance = 1.0
-        self.viewer.cam.azimuth = 0.0
-        self.viewer.cam.elevation = 90.0
 
     def reset_model(self):
         qpos = self.init_qpos
@@ -58,6 +57,8 @@ class PointmassEnv(VisionEnv, utils.EzPickle):
 
 
     def log_diagnostics(self, paths,**kwargs):
+        if not rllab:
+            return
         if isinstance(paths[0]['env_infos'],list):
             dist = np.array([[t['distance'] for t in traj['env_infos']] for traj in paths])
         else:

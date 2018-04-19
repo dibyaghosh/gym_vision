@@ -7,6 +7,9 @@
     </default>
 
     <worldbody>
+        <camera name="worldview" pos="0. 0. .85" zaxis="0.0 0.0 1.0" />
+        <camera name="robot" pos="0. 0. .85" zaxis="0.0 0.0 1.0" />
+
         <!-- Pointmass -->
         <body name="particle" pos="-0.15 -0.15 0">
             <geom name="particle_geom" type="sphere" size="0.03" rgba="0.0 0.0 1.0 1" contype="1"/>

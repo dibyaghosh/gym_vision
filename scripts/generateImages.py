@@ -1,6 +1,7 @@
 import gym
 from gym_vision import envs
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 
 env_names = [k for k in envs.custom_envs.keys() if 'NV' not in k]
 

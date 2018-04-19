@@ -1,7 +1,13 @@
 from gym_vision.envs.vision_env import VisionEnv
 import numpy as np
 import os.path as osp
-from rllab.misc import logger as logger
+
+try:
+    from rllab.misc import logger as logger
+    rllab = True
+except:
+    rllab = False 
+    
 from gym import utils
 MODEL_DIR = osp.abspath(osp.join(osp.dirname(__file__),'assets'))
 
@@ -10,7 +16,7 @@ class ReacherEnv(VisionEnv,utils.EzPickle):
     def __init__(self,random_goal=True,**kwargs):
         self.random = random_goal
         utils.EzPickle.__init__(self)
-        VisionEnv.__init__(self,'reacher.xml',2,**kwargs)
+        VisionEnv.__init__(self,osp.join(MODEL_DIR,'reacher.xml'),2,**kwargs)
         
     def get_goal(self):
         if self.random:
@@ -49,7 +55,7 @@ class ReacherEnv(VisionEnv,utils.EzPickle):
             self.model.data.qvel.flat[:2],
         ])
 
-    def _step(self, a):
+    def step(self, a):
         vec = self.get_body_com("fingertip")-self.get_body_com("target")
         reward_dist = - np.linalg.norm(vec)
         reward_ctrl = - np.square(a).sum()
@@ -62,6 +68,8 @@ class ReacherEnv(VisionEnv,utils.EzPickle):
         return ob, reward, done, dict(dist=-reward_dist)
 
     def log_diagnostics(self, paths,**kwargs):
+        if not rllab:
+            return
         if isinstance(paths[0]['env_infos'],list):
             dist = np.array([[t['distance'] for t in traj['env_infos']] for traj in paths])
         else:
